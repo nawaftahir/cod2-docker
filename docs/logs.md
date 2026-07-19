@@ -38,7 +38,7 @@ server **with `./game` as working directory**, which is where zk_libcod writes i
 - `g_log <name>` - change the game log filename (relative to `fs_game`)
 - `g_logSync 1` - flush every line (slower, but nothing lost on a crash)
 
-Set them in `server.cfg`, in `game/cod2.args`, or via env (`COD2_SET_logfile=1`).
+Set them in `server.cfg` or via env (`COD2_SET_logfile=1`).
 
 ## Console log in `docker logs` vs on disk
 

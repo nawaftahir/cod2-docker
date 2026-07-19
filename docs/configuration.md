@@ -48,7 +48,7 @@ COD2_SET_g_gametype=sd
 COD2_SETA_scr_sd_timelimit=2.5
 ```
 
-## Raw command line and args file
+## Raw command line
 
 | Var | Meaning |
 |---|---|
@@ -56,20 +56,12 @@ COD2_SETA_scr_sd_timelimit=2.5
 | `PARAMS` | raw args appended after generated args |
 | `PARAMS_AFTER` | raw args appended last |
 | `PARAMS_REPLACE=1` | ignore everything generated; run exactly `cod2_lnxded $PARAMS` |
-| `ARGS_FILE` | path to an args file, default `/server/game/cod2.args` |
 
-**Args file**: if `game/cod2.args` exists, its contents are appended to the command
-line, so you can keep launch parameters in a file next to your configs instead of
-editing `.env`. Lines starting with `#` and blank lines are ignored:
+Example, custom params straight from `.env`:
 
+```dotenv
+PARAMS=+set g_password secret +set sv_punkbuster 0
 ```
-# game/cod2.args
-+set sv_punkbuster 0
-+set g_gametype sd
-+exec tournament.cfg
-```
-
-With `PARAMS_REPLACE=1` the args file (plus `PARAMS`) becomes the entire command line.
 
 `PARAMS_REPLACE=1` is the escape hatch for full control; the healthcheck then
 derives the port from a `+set net_port <p>` inside `PARAMS` (or set `CHECK_PORT`).

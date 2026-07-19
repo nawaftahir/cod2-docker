@@ -137,20 +137,10 @@ export LD_LIBRARY_PATH="/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu${LD_LIBRARY_
 ARGS=()
 add_set() { ARGS+=("+$1" "$2" "$3"); }
 
-# Optional args file: keep your own launch parameters in the game dir instead
-# of env vars. Lines starting with # and blank lines are ignored.
-# Default location: ./game/cod2.args (override with ARGS_FILE)
-ARGS_FILE="${ARGS_FILE:-/server/game/cod2.args}"
-FILE_ARGS=""
-if [ -f "$ARGS_FILE" ]; then
-    FILE_ARGS="$(grep -vE '^[[:space:]]*(#|$)' "$ARGS_FILE" | tr '\n' ' ')"
-    log "args file: $ARGS_FILE"
-fi
-
 if [ "${PARAMS_REPLACE:-0}" = "1" ]; then
     # fully custom command line, nothing generated
     # shellcheck disable=SC2086
-    ARGS=(${PARAMS:-} ${FILE_ARGS})
+    ARGS=(${PARAMS:-})
 else
     # shellcheck disable=SC2086
     [ -n "${PARAMS_BEFORE:-}" ] && ARGS+=(${PARAMS_BEFORE})
@@ -179,8 +169,6 @@ else
 
     # shellcheck disable=SC2086
     [ -n "${PARAMS:-}" ]       && ARGS+=(${PARAMS})
-    # shellcheck disable=SC2086
-    [ -n "$FILE_ARGS" ]        && ARGS+=(${FILE_ARGS})
     # shellcheck disable=SC2086
     [ -n "${PARAMS_AFTER:-}" ] && ARGS+=(${PARAMS_AFTER})
 fi

@@ -59,7 +59,6 @@ for the full reference. The short version:
 | `LIBCOD_MODE` | `auto` / `off` (vanilla) / `custom` / `fetch` / `baked` |
 | `COD2_SET_x=v` | becomes `+set x v` (also `COD2_SETA_*`, `COD2_SETS_*`) |
 | `PARAMS`, `PARAMS_REPLACE=1` | raw args / completely custom command line |
-| `game/cod2.args` | your own launch parameters in a file, no `.env` editing |
 | `PUID` / `PGID` | run the server as your host user, files stay yours |
 
 Prefer configuring in `.cfg` files? Keep doing that: point `CONFIG` at your

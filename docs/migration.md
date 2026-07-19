@@ -11,8 +11,8 @@ Checklist for moving a bare-metal or older-container CoD2 server here.
      goes into the same tree; `fs_homepath` defaults to the same `/server/game`
 3. **Old launch command**: either translate each `+set x v` to `COD2_SET_x=v` / the
    first-class vars (`NET_PORT`, `MAXCLIENTS`, `FS_GAME`, `CONFIG`, ...), or skip the
-   translation entirely and paste your old command line into `game/cod2.args`
-   (one arg group per line, `#` comments allowed). `PARAMS_REPLACE=1` keeps it exact.
+   translation entirely and paste your old command line into `PARAMS` in `.env`,
+   with `PARAMS_REPLACE=1` to keep it exact.
 4. **libcod**: rebuild your build reproducibly with
    `./scripts/build-libcod.sh --repo ... --ref ...`, or drop your existing 32-bit
    `libcod2.so` into `./libcod/`. `LIBCOD_MODE=off` if you ran vanilla.
