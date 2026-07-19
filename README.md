@@ -28,7 +28,8 @@ cp .env.example .env                    # set LIBCOD_MODE=off for pure vanilla
 docker compose up -d
 ```
 
-That's it: the server answers on UDP 28960. Check it: `docker compose logs -f`.
+That's it: the server answers on UDP 28960. Watch it: `docker compose logs -f`.
+Enter the live console with `docker attach cod2` (detach: CTRL-P, CTRL-Q).
 
 ## Quickstart (zk_libcod server)
 

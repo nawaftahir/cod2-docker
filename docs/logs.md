@@ -1,4 +1,17 @@
-# Logs
+# Logs & console
+
+## Live console (attach)
+
+The server console is fully interactive, like running `cod2_lnxded` in a screen:
+
+```bash
+docker attach cod2        # live console; type commands (map, status, say, ...)
+```
+
+Detach with **CTRL-P then CTRL-Q**. Do NOT press CTRL-C: that kills the server.
+For read-only watching, prefer `docker compose logs -f` (safe to CTRL-C).
+With multiple servers, attach by each one's `container_name`.
+
 
 Design goal: **every log the server produces lives in your bind-mounted `./game/`
 directory on the host**. Nothing important is buried inside the container or in
