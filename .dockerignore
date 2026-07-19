@@ -1,0 +1,7 @@
+game/
+libcod/
+.env
+docs/
+.github/
+*.md
+!bin/README.md

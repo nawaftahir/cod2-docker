@@ -1,0 +1,6 @@
+# local server data & builds — never committed
+.env
+game/*
+libcod/*
+!game/.gitkeep
+!libcod/.gitkeep

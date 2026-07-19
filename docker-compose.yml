@@ -1,0 +1,49 @@
+services:
+  cod2:
+    build:
+      context: .
+      target: runtime
+      # Baked libcod defaults; override to pin another repo/branch/flags
+      # args:
+      #   LIBCOD_REPO: https://github.com/ibuddieat/zk_libcod
+      #   LIBCOD_REF: master
+      #   LIBCOD_BUILD_ARGS: mysql1
+    image: cod2-server:latest
+    container_name: cod2
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+
+    # --- Networking (pick ONE) ---------------------------------------
+    # host mode (default): real client IPs, no NAT, port = NET_PORT
+    network_mode: host
+    # bridged mode: comment network_mode above, uncomment ports below,
+    # keep host port in sync with the net_port actually in use (.env or .cfg).
+    # Add one line per extra instance / proxy / relay port.
+    # See docs/configuration.md "Networking".
+    # ports:
+    #   - "28960:28960/udp"     # game (net_port)
+    #   - "28970:28970/udp"     # example: second instance
+    #   - "29000:29000/udp"     # example: UDP proxy / relay sidecar
+
+    volumes:
+      # game data: main/ paks, mods, configs
+      - ./game:/server/game
+      # optional hot-swap libcod: drop libcod2.so here + restart
+      - ./libcod:/server/libcod/custom
+
+  # On-demand libcod builder (never starts with the server):
+  #   docker compose --profile tools run --rm libcod-builder mysql2 debug
+  #   or: ./scripts/build-libcod.sh --repo URL --ref BRANCH --args "mysql2 debug"
+  libcod-builder:
+    build:
+      context: .
+      target: libcod-builder
+    image: cod2-server:libcod-builder
+    profiles: [tools]
+    environment:
+      LIBCOD_REPO: ${LIBCOD_REPO:-https://github.com/ibuddieat/zk_libcod}
+      LIBCOD_REF: ${LIBCOD_REF:-master}
+    volumes:
+      - ./libcod:/out

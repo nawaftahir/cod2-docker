@@ -1,0 +1,11 @@
+#!/bin/bash
+# UDP getinfo probe against the server port.
+[ -z "${CHECK_PORT:-}" ] && CHECK_PORT="${COD2_SET_net_port:-}"
+[ -z "$CHECK_PORT" ] && CHECK_PORT="${NET_PORT:-}"
+[ -z "$CHECK_PORT" ] && CHECK_PORT=$(echo "${PARAMS:-} ${PARAMS_BEFORE:-} ${PARAMS_AFTER:-}" | tr "+" "\n" | grep net_port | awk '{print $3}')
+[ -z "$CHECK_PORT" ] && CHECK_PORT=28960
+
+if [ -z "$(printf '\xff\xff\xff\xffgetinfo' | nc -w 1 -u 127.0.0.1 "$CHECK_PORT")" ]; then
+    exit 1
+fi
+exit 0
