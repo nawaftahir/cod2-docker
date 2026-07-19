@@ -25,6 +25,36 @@ docker compose build \
 `LIBCOD_BUILD_ARGS` are `doit.sh` positionals: `mysql1` | `mysql2` | `nomysql`,
 plus optional `nospeex`, `debug`, `unsafe`.
 
+## Recipe: image cached, libcod always fresh from the latest commit
+
+The most common setup: the server image (OS, 32-bit libs, Speex, binaries) is built
+once and cached; only libcod is compiled locally, from the latest commit, whenever
+you want.
+
+One-time, in `.env`:
+
+```dotenv
+LIBCOD_MODE=custom                                   # only ever run my locally-built .so
+LIBCOD_REPO=https://github.com/ibuddieat/zk_libcod
+LIBCOD_REF=dev                                       # branch tip = latest commit at build time
+LIBCOD_BUILD_ARGS=mysql1                             # doit.sh flags: mysql1|mysql2|nomysql, nospeex, debug, unsafe
+```
+
+Build (and later: update) libcod, then restart:
+
+```bash
+docker compose --profile tools run --rm libcod-builder
+docker compose up -d
+```
+
+The builder does a fresh clone every run, so re-running these two commands always
+compiles the latest `LIBCOD_REF` commit. The server image is never rebuilt. The
+startup log prints the sha256 of the `.so` in use so you can verify the swap.
+
+Note: in `custom` mode the server refuses to start until `./libcod/libcod2.so`
+exists, i.e. until the builder has run once. Use `LIBCOD_MODE=auto` instead if you
+want fallback to the baked libcod when no local build is present.
+
 ## `custom` - build locally, hot-swap
 
 ```bash
