@@ -73,10 +73,10 @@ RUN chmod +x /usr/local/bin/build-libcod-inner.sh
 RUN LIBCOD_REPO="${LIBCOD_REPO}" LIBCOD_REF="${LIBCOD_REF}" OUT_DIR=/baked \
       build-libcod-inner.sh ${LIBCOD_BUILD_ARGS}
 
-# Standalone use: mount ./libcod at /out, args are doit.sh args
+# Standalone use: mount ./libcod at /out; flags come from positional args
+# or the LIBCOD_BUILD_ARGS env var (no default CMD so env can win)
 ENV OUT_DIR=/out
 ENTRYPOINT ["/usr/local/bin/build-libcod-inner.sh"]
-CMD ["mysql1"]
 
 # ==================================================================
 # Stage: runtime - the server image (default target)

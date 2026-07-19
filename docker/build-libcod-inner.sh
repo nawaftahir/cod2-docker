@@ -12,7 +12,13 @@ set -euo pipefail
 LIBCOD_REPO="${LIBCOD_REPO:-https://github.com/ibuddieat/zk_libcod}"
 LIBCOD_REF="${LIBCOD_REF:-master}"
 OUT_DIR="${OUT_DIR:-/out}"
-ARGS=("$@")
+# doit.sh flags: positional args win, else LIBCOD_BUILD_ARGS env (from .env)
+if [ $# -gt 0 ]; then
+    ARGS=("$@")
+else
+    # shellcheck disable=SC2206
+    ARGS=(${LIBCOD_BUILD_ARGS:-})
+fi
 
 # doit.sh prompts interactively unless a mysql variant is explicit - never hang
 has_mysql_arg=0

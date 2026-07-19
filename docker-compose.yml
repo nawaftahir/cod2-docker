@@ -11,6 +11,10 @@ services:
     image: cod2-server:latest
     container_name: cod2
     restart: unless-stopped
+    # live server console: docker attach cod2  (detach: CTRL-P then CTRL-Q;
+    # CTRL-C would kill the server). Read-only logs: docker compose logs -f
+    stdin_open: true
+    tty: true
     env_file:
       - path: .env
         required: false
@@ -42,8 +46,12 @@ services:
       target: libcod-builder
     image: cod2-server:libcod-builder
     profiles: [tools]
+    env_file:
+      - path: .env
+        required: false
     environment:
       LIBCOD_REPO: ${LIBCOD_REPO:-https://github.com/ibuddieat/zk_libcod}
       LIBCOD_REF: ${LIBCOD_REF:-master}
+      LIBCOD_BUILD_ARGS: ${LIBCOD_BUILD_ARGS:-mysql1}
     volumes:
       - ./libcod:/out
