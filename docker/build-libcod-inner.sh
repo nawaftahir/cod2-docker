@@ -54,4 +54,12 @@ if [ -z "$so" ]; then
 fi
 mkdir -p "$OUT_DIR"
 cp "$so" "$OUT_DIR/libcod2.so"
+
+# provenance, printed by the server entrypoint at startup
+commit="$(git -C "$workdir/libcod" rev-parse --short HEAD)"
+printf 'repo=%s ref=%s commit=%s args=%s built=%s\n' \
+    "$LIBCOD_REPO" "$LIBCOD_REF" "$commit" "${ARGS[*]}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    > "$OUT_DIR/libcod2.so.info"
+
 echo "[build-libcod] done: $OUT_DIR/libcod2.so ($(sha256sum "$OUT_DIR/libcod2.so" | cut -c1-16)...)"
+echo "[build-libcod] $(cat "$OUT_DIR/libcod2.so.info")"

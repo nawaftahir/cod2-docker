@@ -122,6 +122,7 @@ RUN useradd -m -d /server -s /bin/bash cod2
 
 COPY --chmod=0755 bin/cod2_lnxded_* /server/bin/
 COPY --from=libcod-builder /baked/libcod2.so /server/libcod/libcod2.so.default
+COPY --from=libcod-builder /baked/libcod2.so.info /server/libcod/libcod2.so.default.info
 COPY --chmod=0755 docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY --chmod=0755 docker/healthcheck.sh /usr/local/bin/healthcheck.sh
 

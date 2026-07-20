@@ -126,6 +126,9 @@ else
         exit 1
     fi
     log "libcod: $chosen_so (mode: $LIBCOD_MODE, sha256: $(sha256sum "$chosen_so" | cut -c1-16)...)"
+    if [ -f "$chosen_so.info" ]; then
+        log "libcod build: $(cat "$chosen_so.info")"
+    fi
 fi
 # LD_PRELOAD is applied only on the final exec - exporting it here would spam
 # "wrong ELF class" warnings from every 64-bit helper command

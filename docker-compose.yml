@@ -3,11 +3,12 @@ services:
     build:
       context: .
       target: runtime
-      # Baked libcod defaults; override to pin another repo/branch/flags
-      # args:
-      #   LIBCOD_REPO: https://github.com/ibuddieat/zk_libcod
-      #   LIBCOD_REF: master
-      #   LIBCOD_BUILD_ARGS: mysql1
+      # The baked libcod follows .env too: docker compose build compiles
+      # LIBCOD_REPO @ LIBCOD_REF with LIBCOD_BUILD_ARGS
+      args:
+        LIBCOD_REPO: ${LIBCOD_REPO:-https://github.com/ibuddieat/zk_libcod}
+        LIBCOD_REF: ${LIBCOD_REF:-master}
+        LIBCOD_BUILD_ARGS: ${LIBCOD_BUILD_ARGS:-mysql1}
     image: cod2-server:latest
     container_name: cod2
     restart: unless-stopped

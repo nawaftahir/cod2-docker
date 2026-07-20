@@ -13,17 +13,34 @@ No `LD_PRELOAD` at all. A completely stock CoD2 dedicated server.
 
 ## `baked` - the image default
 
-The Dockerfile builds zk_libcod at image build time. Pin what gets baked with build args:
+The Dockerfile compiles zk_libcod at **image build time** and stores it inside the
+image. It follows the same three `.env` values as the local builder:
 
-```bash
-docker compose build \
-  --build-arg LIBCOD_REPO=https://github.com/ibuddieat/zk_libcod \
-  --build-arg LIBCOD_REF=master \
-  --build-arg LIBCOD_BUILD_ARGS="mysql1"
+```dotenv
+LIBCOD_REPO=https://github.com/ibuddieat/zk_libcod
+LIBCOD_REF=master
+LIBCOD_BUILD_ARGS=mysql1     # doit.sh flags: mysql1|mysql2|nomysql, nospeex, debug, unsafe
 ```
 
-`LIBCOD_BUILD_ARGS` are `doit.sh` positionals: `mysql1` | `mysql2` | `nomysql`,
-plus optional `nospeex`, `debug`, `unsafe`.
+but ONLY when the image is (re)built:
+
+```bash
+docker compose build && docker compose up -d
+```
+
+Changing these values in `.env` does nothing to a running baked libcod until you
+rebuild the image. If you want ".env change + restart" without image rebuilds,
+use the local builder recipe above (`custom` mode) instead.
+
+Every mode's startup log shows exactly what is loaded:
+
+```
+[cod2] libcod: /server/libcod/custom/libcod2.so (mode: custom, sha256: 76a14935...)
+[cod2] libcod build: repo=... ref=dev commit=9556175 args=mysql1 built=2026-07-20T15:34:05Z
+```
+
+If the `commit=` there is not what you expect, the wrong supply path is selected;
+check `LIBCOD_MODE`.
 
 ## Recipe: image cached, libcod always fresh from the latest commit
 
