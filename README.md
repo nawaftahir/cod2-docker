@@ -40,6 +40,19 @@ docker compose logs -f          # watch the console
 docker attach cod2              # interactive console (detach: CTRL-P, CTRL-Q)
 ```
 
+### Custom libcod (no git clone needed)
+
+Build libcod from any repo/branch directly from the pre-built builder image:
+
+```bash
+# set your fork/branch in .env (LIBCOD_REPO, LIBCOD_REF), then:
+docker compose --profile tools run --rm libcod-builder mysql1
+# set LIBCOD_MODE=custom in .env, then restart:
+docker compose restart
+```
+
+See [docs/libcod.md](docs/libcod.md) for all supply paths.
+
 ## Quickstart (build from source)
 
 If you want to build the image yourself (custom libcod flags, different base OS, etc.):

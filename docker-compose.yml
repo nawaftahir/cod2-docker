@@ -38,10 +38,12 @@ services:
   #   docker compose --profile tools run --rm libcod-builder mysql2 debug
   #   or: ./scripts/build-libcod.sh --repo URL --ref BRANCH --args "mysql2 debug"
   libcod-builder:
-    build:
-      context: .
-      target: libcod-builder
-    image: cod2-server:libcod-builder
+    # Pre-built builder image from GHCR (default). To build locally instead,
+    # comment the image line and uncomment the build block below.
+    image: ghcr.io/nawaftahir/cod2-docker:libcod-builder
+    # build:
+    #   context: .
+    #   target: libcod-builder
     profiles: [tools]
     env_file:
       - path: .env

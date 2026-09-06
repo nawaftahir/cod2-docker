@@ -59,7 +59,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push image
+      - name: Push runtime image
         if: startsWith(github.ref, 'refs/tags/v') && matrix.base == 'debian:13-slim'
         uses: docker/build-push-action@v6
         with:
@@ -69,4 +69,16 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          cache-from: type=gha
+
+      - name: Push libcod-builder image
+        if: startsWith(github.ref, 'refs/tags/v') && matrix.base == 'debian:13-slim'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: libcod-builder
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:libcod-builder
+            ghcr.io/${{ github.repository }}:libcod-builder-${{ github.ref_name }}
           cache-from: type=gha

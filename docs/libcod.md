@@ -74,23 +74,32 @@ want fallback to the baked libcod when no local build is present.
 
 ## `custom` - build locally, hot-swap
 
+One command builds libcod from any repo/branch and drops `libcod2.so` into `./libcod/`:
+
 ```bash
-./scripts/build-libcod.sh --repo <git url> --ref <branch|tag|sha> --args "mysql2 debug"
-docker compose restart cod2
+docker compose --profile tools run --rm libcod-builder mysql1
+docker compose restart
 ```
 
-This runs the `libcod-builder` image (same toolchain that baked the default: 32-bit g++,
-Speex, MySQL client headers) and writes `./libcod/libcod2.so`, which is bind-mounted
-into the server. In `auto` mode a file there always wins. Delete the file to fall back.
+This pulls the `libcod-builder` image from GHCR (no Dockerfile or git clone needed),
+clones the repo set in `.env` (`LIBCOD_REPO` + `LIBCOD_REF`), compiles it, and writes
+`./libcod/libcod2.so`. Set `LIBCOD_MODE=custom` in `.env` so the server uses it.
 
-Use this to update libcod to a newer commit at any time: re-run the script, restart
-the container, done. The same path works for any zk_libcod-compatible repo or branch,
-and for build flags the CI artifacts never include (`unsafe`, `debug`, Speex).
-
-Equivalent without the helper:
+To build from a different repo or branch without changing `.env`:
 
 ```bash
-LIBCOD_REPO=<url> LIBCOD_REF=<ref> docker compose --profile tools run --rm libcod-builder mysql2 debug
+LIBCOD_REPO=https://github.com/yourfork/zk_libcod LIBCOD_REF=dev \
+  docker compose --profile tools run --rm libcod-builder mysql1
+```
+
+Re-run the same command any time to update to the latest commit. The server picks up the
+new `.so` on restart. Works with any zk_libcod-compatible repo/branch, and supports build
+flags CI artifacts never include (`unsafe`, `debug`, Speex).
+
+If you cloned this repo (have the Dockerfile), you can also use the helper script:
+
+```bash
+./scripts/build-libcod.sh --repo <git url> --ref <branch|tag|sha> --args "mysql2 debug"
 ```
 
 ## `fetch` - download a prebuilt .so or CI artifact
